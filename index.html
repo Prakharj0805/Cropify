@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multi-Model Crop Prediction System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding-top: 50px; }
+        .prediction-result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">Multi-Model Crop Prediction System</h1>
+
+        <ul class="nav nav-tabs" id="predictionTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="multi-tab" data-bs-toggle="tab" data-bs-target="#multi" type="button" role="tab">Combined Prediction</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="soil-tab" data-bs-toggle="tab" data-bs-target="#soil" type="button" role="tab">Soil-Based</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="weather-tab" data-bs-toggle="tab" data-bs-target="#weather" type="button" role="tab">Weather-Based</button>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-4" id="predictionTabContent">
+            <!-- Multi-Model Form -->
+            <div class="tab-pane fade show active" id="multi" role="tabpanel">
+                <h3>Combined Model Prediction</h3>
+                <form id="multiModelForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Soil Parameters</h4>
+                            <div class="mb-3">
+                                <label for="temperature_multi" class="form-label">Temperature (°C)</label>
+                                <input type="number" step="0.1" class="form-control" id="temperature_multi" name="temperature" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="humidity_multi" class="form-label">Humidity (%)</label>
+                                <input type="number" step="0.1" class="form-control" id="humidity_multi" name="humidity" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="moisture_multi" class="form-label">Moisture (%)</label>
+                                <input type="number" step="0.1" class="form-control" id="moisture_multi" name="moisture" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="soil_type" class="form-label">Soil Type</label>
+                                <input type="text" class="form-control" id="soil_type" name="soil_type" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nitrogen_multi" class="form-label">Nitrogen (mg/kg)</label>
+                                <input type="number" step="0.1" class="form-control" id="nitrogen_multi" name="nitrogen" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="potassium_multi" class="form-label">Potassium (mg/kg)</label>
+                                <input type="number" step="0.1" class="form-control" id="potassium_multi" name="potassium" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phosphorous_multi" class="form-label">Phosphorous (mg/kg)</label>
+                                <input type="number" step="0.1" class="form-control" id="phosphorous_multi" name="phosphorous" required>
+                            </div>
+                             <div class="mb-3">
+                                <label for="fertilizer_name" class="form-label">Fertilizer Name</label>
+                                <input type="text" class="form-control" id="fertilizer_name" name="fertilizer_name" required>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Weather and Location Parameters</h4>
+                            <div class="mb-3">
+                                <label for="avg_temp" class="form-label">Average Temperature (°C)</label>
+                                <input type="number" step="0.1" class="form-control" id="avg_temp" name="avg_temp" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="precipitation" class="form-label">Total Precipitation (mm)</label>
+                                <input type="number" step="0.1" class="form-control" id="precipitation" name="precipitation" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="co2_emissions" class="form-label">CO2 Emissions (MT)</label>
+                                <input type="number" step="0.1" class="form-control" id="co2_emissions" name="co2_emissions" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="extreme_weather" class="form-label">Extreme Weather Events</label>
+                                <input type="number" class="form-control" id="extreme_weather" name="extreme_weather" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="irrigation_access" class="form-label">Irrigation Access (%)</label>
+                                <input type="number" step="0.1" class="form-control" id="irrigation_access" name="irrigation_access" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="pesticide_use" class="form-label">Pesticide Use (KG/HA)</label>
+                                <input type="number" step="0.1" class="form-control" id="pesticide_use" name="pesticide_use" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="fertilizer_use" class="form-label">Fertilizer Use (KG/HA)</label>
+                                <input type="number" step="0.1" class="form-control" id="fertilizer_use" name="fertilizer_use" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="soil_health" class="form-label">Soil Health Index</label>
+                                <input type="number" step="0.1" class="form-control" id="soil_health" name="soil_health" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="adaptation_strategy" class="form-label">Adaptation Strategy</label>
+                                <input type="text" class="form-control" id="adaptation_strategy" name="adaptation_strategy" required>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Predict Crop</button>
+                </form>
+                <div id="multiResult" class="prediction-result bg-light"></div>
+            </div>
+
+            <!-- Soil Model Form -->
+            <div class="tab-pane fade" id="soil" role="tabpanel">
+                <h3>Soil-Based Prediction</h3>
+                <form id="soilModelForm">
+                    <div class="mb-3">
+                        <label for="temperature_only" class="form-label">Temperature (°C)</label>
+                        <input type="number" step="0.1" class="form-control" id="temperature_only" name="temperature" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="humidity_only" class="form-label">Humidity (%)</label>
+                        <input type="number" step="0.1" class="form-control" id="humidity_only" name="humidity" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="moisture_only" class="form-label">Moisture (%)</label>
+                        <input type="number" step="0.1" class="form-control" id="moisture_only" name="moisture" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="soil_type_only" class="form-label">Soil Type</label>
+                        <input type="text" class="form-control" id="soil_type_only" name="soil_type" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="nitrogen_only" class="form-label">Nitrogen (mg/kg)</label>
+                        <input type="number" step="0.1" class="form-control" id="nitrogen_only" name="nitrogen" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="potassium_only" class="form-label">Potassium (mg/kg)</label>
+                        <input type="number" step="0.1" class="form-control" id="potassium_only" name="potassium" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phosphorous_only" class="form-label">Phosphorous (mg/kg)</label>
+                        <input type="number" step="0.1" class="form-control" id="phosphorous_only" name="phosphorous" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="fertilizer_name_only" class="form-label">Fertilizer Name</label>
+                        <input type="text" class="form-control" id="fertilizer_name_only" name="fertilizer_name" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Predict Crop</button>
+                </form>
+                <div id="soilResult" class="prediction-result bg-light"></div>
+            </div>
+
+            <!-- Weather Model Form -->
+            <div class="tab-pane fade" id="weather" role="tabpanel">
+                <h3>Weather-Based Prediction</h3>
+                <form id="weatherModelForm">
+                    <div class="mb-3">
+                        <label for="avg_temp_only" class="form-label">Average Temperature (°C)</label>
+                        <input type="number" step="0.1" class="form-control" id="avg_temp_only" name="avg_temp" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="precipitation_only" class="form-label">Total Precipitation (mm)</label>
+                        <input type="number" step="0.1" class="form-control" id="precipitation_only" name="precipitation" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="co2_emissions_only" class="form-label">CO2 Emissions (MT)</label>
+                        <input type="number" step="0.1" class="form-control" id="co2_emissions_only" name="co2_emissions" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="extreme_weather_only" class="form-label">Extreme Weather Events</label>
+                        <input type="number" class="form-control" id="extreme_weather_only" name="extreme_weather" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="irrigation_access_only" class="form-label">Irrigation Access (%)</label>
+                        <input type="number" step="0.1" class="form-control" id="irrigation_access_only" name="irrigation_access" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pesticide_use_only" class="form-label">Pesticide Use (KG/HA)</label>
+                        <input type="number" step="0.1" class="form-control" id="pesticide_use_only" name="pesticide_use" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fertilizer_use_only" class="form-label">Fertilizer Use (KG/HA)</label>
+                        <input type="number" step="0.1" class="form-control" id="fertilizer_use_only" name="fertilizer_use" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="soil_health_only" class="form-label">Soil Health Index</label>
+                        <input type="number" step="0.1" class="form-control" id="soil_health_only" name="soil_health" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="adaptation_strategy_only" class="form-label">Adaptation Strategy</label>
+                        <input type="text" class="form-control" id="adaptation_strategy_only" name="adaptation_strategy" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Predict Crop</button>
+                </form>
+                <div id="weatherResult" class="prediction-result bg-light"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('multiModelForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const jsonData = {};
+
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            fetch('/predict/multi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('multiResult');
+                resultDiv.style.display = 'block';
+
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <h4>Prediction Results</h4>
+                        <p><strong>Recommended Crop:</strong> ${data.prediction}</p>
+                        <p><strong>Confidence:</strong> ${(data.confidence * 100).toFixed(2)}%</p>
+                        <p><strong>Model Used:</strong> ${data.model_used}</p>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Soil Model Prediction</h5>
+                                <p>Crop: ${data.soil_prediction.crop}</p>
+                                <p>Confidence: ${(data.soil_prediction.confidence * 100).toFixed(2)}%</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Weather Model Prediction</h5>
+                                <p>Crop: ${data.weather_prediction.crop}</p>
+                                <p>Confidence: ${(data.weather_prediction.confidence * 100).toFixed(2)}%</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">Error: ${data.error}</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('multiResult').innerHTML = `<div class="alert alert-danger">An error occurred: ${error}</div>`;
+            });
+        });
+
+        document.getElementById('soilModelForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const jsonData = {};
+
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            fetch('/predict/soil', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('soilResult');
+                resultDiv.style.display = 'block';
+
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <h4>Soil Model Prediction Results</h4>
+                        <p><strong>Recommended Crop:</strong> ${data.prediction}</p>
+                        <p><strong>Confidence:</strong> ${(data.confidence * 100).toFixed(2)}%</p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">Error: ${data.error}</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('soilResult').innerHTML = `<div class="alert alert-danger">An error occurred: ${error}</div>`;
+            });
+        });
+
+        document.getElementById('weatherModelForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const jsonData = {};
+
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            fetch('/predict/weather', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('weatherResult');
+                resultDiv.style.display = 'block';
+
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <h4>Weather Model Prediction Results</h4>
+                        <p><strong>Recommended Crop:</strong> ${data.prediction}</p>
+                        <p><strong>Confidence:</strong> ${(data.confidence * 100).toFixed(2)}%</p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">Error: ${data.error}</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('weatherResult').innerHTML = `<div class="alert alert-danger">An error occurred: ${error}</div>`;
+            });
+        });
+    </script>
+</body>
+</html>
